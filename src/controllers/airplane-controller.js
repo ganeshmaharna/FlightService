@@ -6,6 +6,7 @@ const { SuccessResponse, ErrorResponse } = require("../utils/common");
 
 // POST : /api/v1/airplanes
 // req-body {modelNumber:'airbus20',capacity:320}
+console.log("This is airplane service"+AirplaneService);
 
 async function createAirplane(req, res) {
   try {
