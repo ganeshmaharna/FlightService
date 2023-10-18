@@ -1,16 +1,18 @@
 const {FlightRepository} = require("../repositories");
 const {StatusCodes}=require('http-status-codes');
+const {compareTime}= require('../utils/helpers/datetime-helpers');
 const flightRepository = new FlightRepository();
 const AppError=require("../utils/errors/app-error");
 
 async function createFlight(data){
     try{
         console.log("Inside the service");
-        console.log(data);
+        if(!compareTime(data.arrivalTime,data.departureTime)){
+            throw new AppError("The arrival time is less than departure",StatusCodes.BAD_REQUEST);
+        }
        const flight = await flightRepository.create(data);
        return flight;
     }catch(error){
-        console.log(error);
         if(error.name === "SequelizeValidationError"){
             let explanation=[];
             error.errors.forEach(element => {
