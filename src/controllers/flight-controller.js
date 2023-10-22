@@ -38,6 +38,20 @@ async function createFlight(req, res) {
     return res.status(error.statusCode).json(ErrorResponse); //This line is imp here service through the status codes to here and here we only configure the statusCodes
   }
 }
+// GET : /api/v1/airplanes
+
+async function getAllFlights(req, res) {
+  try {
+    const flights = await FlightService.getAllFlights(req.query);
+    SuccessResponse.data = flights;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    console.log("This is controller error for getting all the airplane" + error);
+    ErrorResponse.error = error;
+    return res.status(error.statusCode).json(ErrorResponse);
+  }
+}
 module.exports={
-    createFlight
+    createFlight,
+    getAllFlights
 }
