@@ -5,7 +5,7 @@ const { FlightService } = require("../services");
 const { SuccessResponse, ErrorResponse } = require("../utils/common");
 
 /**
- * POST : /flights 
+ * POST : /flights
  * req-body {
  *  flightNumber: 'UK 808',
  *  airplaneId: 'a380',
@@ -29,7 +29,7 @@ async function createFlight(req, res) {
       departureTime: req.body.departureTime,
       price: req.body.price,
       boardingGate: req.body.boardingGate,
-      totalSeats: req.body.totalSeats
+      totalSeats: req.body.totalSeats,
     });
     SuccessResponse.data = flight;
     return res.status(StatusCodes.CREATED).json(SuccessResponse);
@@ -46,7 +46,9 @@ async function getAllFlights(req, res) {
     SuccessResponse.data = flights;
     return res.status(StatusCodes.OK).json(SuccessResponse);
   } catch (error) {
-    console.log("This is controller error for getting all the airplane" + error);
+    console.log(
+      "This is controller error for getting all the airplane" + error
+    );
     ErrorResponse.error = error;
     return res.status(error.statusCode).json(ErrorResponse);
   }
@@ -65,8 +67,24 @@ async function getFlight(req, res) {
   }
 }
 
-module.exports={
-    createFlight,
-    getAllFlights,
-    getFlight
+async function updateSeats(req, res) {
+  try {
+    console.log(req.body);
+    const response = await FlightService.updateSeats({
+      flightId: req.params.id,
+      seats: req.body.seats,
+      dec: req.body.dec,
+    });
+    SuccessResponse.data = response;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res.status(error.statusCode).json(ErrorResponse);
+  }
 }
+module.exports = {
+  createFlight,
+  getAllFlights,
+  getFlight,
+  updateSeats
+};
